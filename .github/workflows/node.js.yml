@@ -42,6 +42,6 @@ jobs:
           cd basic_deploy_digitalocean
           git pull origin main
           docker-compose down --rmi all
-          docker-compose up -d --no-deps --build node-app
+          docker-compose up -d --no-deps --build
 # npm install --production
 # pm2 restart src/bin/server.js
