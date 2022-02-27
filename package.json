@@ -1,0 +1,22 @@
+{
+  "name": "basic_deploy_digitalocean",
+  "version": "1.0.0",
+  "description": "Automate deploy to DigitalOcean with GitHub actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MauBoaventura/basic_deploy_digitalocean.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MauBoaventura/basic_deploy_digitalocean/issues"
+  },
+  "homepage": "https://github.com/MauBoaventura/basic_deploy_digitalocean#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
