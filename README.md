@@ -47,11 +47,11 @@ Agora para acessar usa-se : `ssh username@SERVER.IP `
 - Instala-se o git : `sudo apt-get install git`
 - Roda o comando : `ssh-keygen`
 
-~ ## Configurar ambiente da GitHub~
+~## Configurar ambiente da GitHub~
 
-~ - Ainda logado no servidor copie a saída do comando ~
+~- Ainda logado no servidor copie a saída do comando~
 
-~ `cat ~/.ssh/id_rsa.pub`~
+~`cat ~/.ssh/id_rsa.pub`~
 
 ~e cole na aba Settings no *Deploy keys* do projeto~
 
