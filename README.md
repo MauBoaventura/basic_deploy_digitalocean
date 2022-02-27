@@ -24,7 +24,7 @@
 
     Depois abra o arquivo `/etc/passwd` e onde tem um "x" após o username, basta apagar **apenas o x**
 
-### Configurando acesso SSH
+#### Configurando acesso SSH
 
 Em seguida execute os comandos:
 
@@ -54,4 +54,62 @@ Agora para acessar usa-se : `ssh username@SERVER.IP `
 ~`cat ~/.ssh/id_rsa.pub`~
 
 ~e cole na aba Settings no *Deploy keys* do projeto~
+
+## Configurar GitHub Actions para deploy
+Antes de realizarmos a criação do pipeline é necessário configurar algumas variaveis no projeto para garantir a segurança
+Vá em `https://github.com/<usuarioGitHub>/<repositorio>/settings/secrets/actions` e configure as seguintes chaves:
+| **Name**     | **Value**                                                |
+|--------------|----------------------------------------------------------|
+| SSH_HOST     | Endereço IP do servidor da DigitalOcean                  |
+| SSH_KEY      | A chave ssh da sua maquina que tenha acesso ao servidor* |
+| SSH_PORT     | 42                                                       |
+| SSH_USERNAME | Usuário criado para acesso ao servidor                   |
+
+*no caso a chave privada da sua máquina `~/.ssh/id_rsa`.
+
+![image](https://user-images.githubusercontent.com/18109053/155901565-5e122039-8ba1-492e-8921-c92801633afb.png)
+
+
+- No seu repositorio clique em *Actions*
+![image](https://user-images.githubusercontent.com/18109053/155900124-a8f9495b-0616-40bc-ab8a-07ed77a6cad0.png)
+
+
+- Como o projeto é em node podemos usar esse como modelo
+![image](https://user-images.githubusercontent.com/18109053/155900227-a00edc43-52b7-42dd-a1c5-6098e85079e1.png)
+
+Assim será criado um arquivo `.yml` no caminho `.github/workflows/`
+![image](https://user-images.githubusercontent.com/18109053/155900286-c6fe1c8a-3af4-498e-9559-2ba959749fd7.png)
+
+nesse você deve colar o seguinte código:
+
+```yml
+name: Node Github CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: SSH and deploy node app
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          whoami
+          mkdir ~/containers 
+          cd ~/containers
+          git clone git@github.com:UsuarioGitHub/repositorio.git
+          cd repositorio
+          git pull origin main
+          docker-compose down --rmi all
+          docker-compose up -d --no-deps --build
+  ```
+Assim finalizamos a configuração do Pipeline. 
+Sempre que a branch _main_ sofrer alteração o pipeline será executado  
 
