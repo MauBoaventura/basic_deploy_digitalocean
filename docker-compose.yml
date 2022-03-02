@@ -9,4 +9,4 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - {PORT_EXPOSE}:3001
+      - "${PORT}:3000"
