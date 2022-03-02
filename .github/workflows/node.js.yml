@@ -40,6 +40,7 @@ jobs:
           git clone https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           cd ${{ github.event.repository.name }}
           git pull origin main
+          docker-compose config
           docker-compose down --rmi all
           docker-compose up -d --no-deps --build
 # npm install --production
