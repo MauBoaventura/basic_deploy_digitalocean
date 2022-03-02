@@ -83,6 +83,16 @@ USER node
 CMD ["node", "index.js"]
 ```
 
+e colocar na pasta ~/container um arquivo `set_incremental_port.sh` 
+
+```shell
+tag=`cut -d '=' -f1 ../.env`
+oldnum=`cut -d '=' -f2 ../.env`
+newnum=`expr $oldnum + 1`
+echo $tag=$oldnum >> .env
+sed -i "s/$oldnum\$/$newnum/g" ../.env
+```
+
 ## Configurar GitHub Actions para deploy
 
 Vá em `https://github.com/<usuarioGitHub>/<repositorio>/settings/secrets/actions` e configure as seguintes chaves:
