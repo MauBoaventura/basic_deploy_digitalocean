@@ -52,7 +52,7 @@ Agora para acessar usa-se : `ssh username@SERVER.IP `
  É importante dar permissão para o novo usuário poder rodar o comando `docker`
 
 ## Configurar os arquivod Dockerfile e docker-compose.yml
-- É necessário criar em seu projeto um arquivo docker-compose.yml para configurar a orquestrção dos containers, que nesse caso é só mais um serviço node rodando na porta `3001`.
+- É necessário criar em seu projeto um arquivo docker-compose.yml para configurar a orquestrção dos containers, que nesse caso é só mais um serviço node rodando internamente na porta definida pela variavel de ambiente ${PORT} que pode ser definida no arquivo .env (padrão é 3000).
 ```yml
 version: '3.4'
 
@@ -65,8 +65,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3001:3001
-
+      - "${PORT_EXPOSE}:${PORT:3000}"
 ```
 
 - E é preciso tambem criar um arquivo Dockerfile que irá dizer como o container se comportará
@@ -78,7 +77,7 @@ WORKDIR /usr/src/app
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 RUN npm install --production --silent && mv node_modules ../
 COPY . .
-EXPOSE 3001
+EXPOSE 3000
 RUN chown -R node /usr/src/app
 USER node
 CMD ["node", "index.js"]
@@ -130,15 +129,17 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          whoami
           mkdir ~/containers 
           cd ~/containers
-          git clone https://github.com/<usuarioGitHub>/<repositorio>.git
-          cd <repositorio>
+          git clone https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
+          cd ${{ github.event.repository.name }}
           git pull origin main
+          [ ! -f .env ] && ~/containers/set_incremental_port.sh # Cria o .env usando como modelo o que está no servidor
+          docker-compose config
           docker-compose down --rmi all
           docker-compose up -d --no-deps --build
-  ```
+```
 Assim finalizamos a configuração do Pipeline. 
+
 Sempre que a branch _main_ sofrer alteração o pipeline será executado  
 
