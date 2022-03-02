@@ -35,7 +35,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          whoami
+          export PORT_AVALIBLE=${PORT_AVALIBLE:-3001} #Cria variavel de ambiente (se não existir) com valor inicial em 3001
           mkdir ~/containers 
           cd ~/containers
           git clone https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
