@@ -8,5 +8,10 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
+    env_file:
+    - ./.env
     ports:
-      - ${PORT_EXPOSE}:${PORT}
+    - target: ${PORT_EXPOSE}
+      published: ${PORT}
+      protocol: tcp
+      mode: host
