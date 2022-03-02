@@ -43,6 +43,6 @@ jobs:
           [ ! -f .env ] && ~/containers/set_incremental_port.sh
           docker-compose config
           docker-compose down --rmi all
-          docker-compose --env-file ../.env -d --no-deps --build
+          docker-compose -d --no-deps --build
 # npm install --production
 # pm2 restart src/bin/server.js
