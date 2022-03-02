@@ -133,7 +133,7 @@ jobs:
           whoami
           mkdir ~/containers 
           cd ~/containers
-          git clone git@github.com:<usuarioGitHub>/<repositorio>.git
+          git clone https://github.com/<usuarioGitHub>/<repositorio>.git
           cd <repositorio>
           git pull origin main
           docker-compose down --rmi all
