@@ -9,5 +9,4 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - PORT_EXPOSE: 3001
-      - target: 3001
+      - {PORT_EXPOSE}:3001
