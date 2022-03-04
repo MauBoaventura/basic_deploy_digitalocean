@@ -53,6 +53,7 @@ Agora para acessar usa-se : `ssh username@SERVER.IP `
 
 ## Configurar os arquivod Dockerfile e docker-compose.yml
 - É necessário criar em seu projeto um arquivo docker-compose.yml para configurar a orquestrção dos containers, que nesse caso é só mais um serviço node rodando internamente na porta definida pela variavel de ambiente ${PORT} que pode ser definida no arquivo .env (padrão é 3000).
+
 ```yml
 version: '3.4'
 
@@ -83,7 +84,7 @@ USER node
 CMD ["node", "index.js"]
 ```
 
-e colocar na pasta ~/container um arquivo `set_incremental_port.sh` 
+- E colocar na pasta ~/container um arquivo `set_incremental_port.sh` 
 
 ```shell
 tag=`cut -d '=' -f1 ../.env`
@@ -91,6 +92,12 @@ oldnum=`cut -d '=' -f2 ../.env`
 newnum=`expr $oldnum + 1`
 echo $tag=$oldnum >> .env
 sed -i "s/$oldnum\$/$newnum/g" ../.env
+```
+
+e um arquivo .env com
+
+```env
+PORT_EXPOSE:3000
 ```
 
 ## Configurar GitHub Actions para deploy
