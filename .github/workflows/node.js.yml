@@ -39,9 +39,7 @@ jobs:
           cd ~/containers
           git clone https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           cd ${{ github.event.repository.name }}
-          git pull origin main
-          [ ! -f .env ] && ~/containers/set_incremental_port.sh
+          git pull origin ${{github.ref_name}}
+          [ ! -f .env ] && ~/containers/set_incremental_port.sh # Cria o .env usando como modelo o que está no servidor
           docker-compose down --rmi all
           docker-compose up -d --no-deps --build
-# npm install --production
-# pm2 restart src/bin/server.js
