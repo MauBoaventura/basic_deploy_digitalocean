@@ -66,7 +66,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - "${PORT_EXPOSE}:${PORT:3000}"
+      - "${PORT_EXPOSE}:${PORT:-3000}"
 ```
 
 - E é preciso tambem criar um arquivo Dockerfile que irá dizer como o container se comportará
@@ -94,7 +94,7 @@ echo $tag=$oldnum >> .env
 sed -i "s/$oldnum\$/$newnum/g" ../.env
 ```
 
-e um arquivo .env com
+e opcionalmente um arquivo .env com
 
 ```env
 PORT_EXPOSE:3000
@@ -150,13 +150,12 @@ jobs:
           cd ~/containers
           git clone https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}.git
           cd ${{ github.event.repository.name }}
-          git pull origin main
+          git pull origin ${{github.ref_name}}
           [ ! -f .env ] && ~/containers/set_incremental_port.sh # Cria o .env usando como modelo o que está no servidor
-          docker-compose config
           docker-compose down --rmi all
           docker-compose up -d --no-deps --build
 ```
 Assim finalizamos a configuração do Pipeline. 
 
-Sempre que a branch _main_ sofrer alteração o pipeline será executado  
+Sempre que a branch _${{github.ref_name}}_ sofrer alteração o pipeline será executado  
 
